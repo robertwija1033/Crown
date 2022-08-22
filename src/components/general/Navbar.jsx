@@ -14,18 +14,24 @@ import {
   NavLink,
   ShoppingIcon,
 } from "../../styles/navbar/Navbar";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../../context/userContext";
-import { CartContext } from "../../context/cart/cartContext";
-import { signOutUser } from "../../utils/firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { userMemoization } from "../../redux/memoization/userMemoization";
+import {
+  CartMemoization,
+  cartTotalMemoization,
+} from "../../redux/memoization/cartMemoization";
+import { signOutStart } from "../../redux/actions/userAction";
 import Button from "../button/Button";
 
 const Navbar = () => {
   const [isCartClick, setIsCartClick] = useState(false);
-  const { currentUser } = useContext(UserContext);
-  const { cartTotal, cartItems } = useContext(CartContext);
+  const currentUser = useSelector(userMemoization);
+  const cartItems = useSelector(CartMemoization);
+  const cartTotal = useSelector(cartTotalMemoization);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <ContainerNavbar>
@@ -39,7 +45,11 @@ const Navbar = () => {
       <ContainerNavLinks>
         <NavLink to="/shop">SHOP</NavLink>
         {currentUser ? (
-          <NavLink as="span" to="/authentication" onClick={signOutUser}>
+          <NavLink
+            as="span"
+            to="/authentication"
+            onClick={() => dispatch(signOutStart())}
+          >
             SIGN OUT
           </NavLink>
         ) : (

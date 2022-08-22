@@ -2,13 +2,13 @@ import {
   CheckoutHeader,
   HeaderBlock,
 } from "../../styles/checkout/CheckoutTable";
-import { useContext } from "react";
-import { CartContext } from "../../context/cart/cartContext";
+import { useSelector } from "react-redux";
+import { CartMemoization } from "../../redux/memoization/cartMemoization";
 import CheckoutItem from "./CheckoutItem";
 import CheckoutTotal from "./CheckoutTotal";
 
 const CheckoutTable = () => {
-  const { cartItems } = useContext(CartContext);
+  const cartItems = useSelector(CartMemoization);
 
   return (
     <>
@@ -30,9 +30,9 @@ const CheckoutTable = () => {
         </HeaderBlock>
       </CheckoutHeader>
       {cartItems.map((product) => (
-        <CheckoutItem product={product} />
+        <CheckoutItem key={product.id} product={product} />
       ))}
-      <CheckoutTotal />
+      
     </>
   );
 };

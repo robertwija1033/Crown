@@ -3,10 +3,8 @@ import {
   SignInButton,
 } from "../../styles/authentication/SignIn";
 import { useState } from "react";
-import {
-  signInWithGooglePopup,
-  signInAuthUserWithEmailAndPassword,
-} from "../../utils/firebase";
+import { useDispatch } from "react-redux";
+import { emailSignIn, googleSignIn } from "../../redux/actions/userAction";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/Button";
 import FormAuth from "./FormAuth";
 
@@ -15,6 +13,7 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,10 +26,7 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
-      const response = await signInAuthUserWithEmailAndPassword(
-        email,
-        password
-      );
+      dispatch(emailSignIn(email, password));
 
       setFillSignIn({ email: "", password: "" });
     } catch (error) {
@@ -49,7 +45,7 @@ const SignIn = () => {
   };
 
   const signInWithGoogle = async () => {
-    await signInWithGooglePopup();
+    dispatch(googleSignIn());
   };
 
   return (

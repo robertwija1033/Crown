@@ -7,13 +7,18 @@ import {
   RemoveButton,
   Value,
 } from "../../styles/checkout/CheckoutItem";
-import { useContext } from "react";
-import { CartContext } from "../../context/cart/cartContext";
+import { useDispatch, useSelector } from "react-redux";
+import { CartMemoization } from "../../redux/memoization/cartMemoization";
+import {
+  addItemToCart,
+  deleteItemToCart,
+  subtractItemToCart,
+} from "../../redux/actions/cartAction";
 
 const CheckoutItem = ({ product }) => {
+  const dispatch = useDispatch();
   const { name, quantity, imageUrl, price } = product;
-  const { addItemToCart, subtractItemToCart, deleteItemToCart } =
-    useContext(CartContext);
+  const cartItems = useSelector(CartMemoization);
 
   return (
     <ContainerCheckoutItem>
@@ -22,12 +27,18 @@ const CheckoutItem = ({ product }) => {
       </Image>
       <BaseSpan> {name} </BaseSpan>
       <Quantity>
-        <Arrow onClick={() => subtractItemToCart(product)}>&#10094;</Arrow>
+        <Arrow onClick={() => dispatch(subtractItemToCart(cartItems, product))}>
+          &#10094;
+        </Arrow>
         <Value>{quantity}</Value>
-        <Arrow onClick={() => addItemToCart(product)}>&#10095;</Arrow>
+        <Arrow onClick={() => dispatch(addItemToCart(cartItems, product))}>
+          &#10095;
+        </Arrow>
       </Quantity>
       <BaseSpan> {price}</BaseSpan>
-      <RemoveButton onClick={() => deleteItemToCart(product)}>
+      <RemoveButton
+        onClick={() => dispatch(deleteItemToCart(cartItems, product))}
+      >
         &#10005;
       </RemoveButton>
     </ContainerCheckoutItem>

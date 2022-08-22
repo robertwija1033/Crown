@@ -1,9 +1,7 @@
 import { ContainerSignUp } from "../../styles/authentication/SignUp";
 import { useState } from "react";
-import {
-  createAuthUserWithEmailAndPassword,
-  createUserDocumentFromAuth,
-} from "../../utils/firebase";
+import { useDispatch } from "react-redux";
+import { signUpStart } from "../../redux/actions/userAction";
 import FormAuth from "./FormAuth";
 import Button from "../button/Button";
 
@@ -14,6 +12,7 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,12 +29,7 @@ const SignUp = () => {
     }
 
     try {
-      const { user } = await createAuthUserWithEmailAndPassword(
-        email,
-        password
-      );
-
-      await createUserDocumentFromAuth(user, { displayName });
+      dispatch(signUpStart(email, password, displayName));
       setFillSignUp({
         displayName: "",
         email: "",

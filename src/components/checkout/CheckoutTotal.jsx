@@ -1,9 +1,9 @@
 import { Total } from "../../styles/checkout/CheckoutTotal.js";
-import { useContext } from "react";
-import { CartContext } from "../../context/cart/cartContext";
+import { useSelector } from "react-redux";
+import { totalPriceMemoization } from "../../redux/memoization/cartMemoization.js";
 
 const CheckoutTotal = () => {
-  const { totalPrice } = useContext(CartContext);
+  const totalPrice = useSelector(totalPriceMemoization);
 
   return <Total>TOTAL: ${totalPrice}</Total>;
 };
